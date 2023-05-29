@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -17,7 +18,6 @@ public class DbTaskRepository implements TaskRepository{
     }
 
     @Override
-    @Transactional
     public Task save(Task task) {
         task.setId(nextId);
         entityManager.persist(task);
@@ -29,4 +29,5 @@ public class DbTaskRepository implements TaskRepository{
     public Optional<Task> findById(Long id) {
         return Optional.ofNullable(entityManager.find(Task.class, id));
     }
+
 }
