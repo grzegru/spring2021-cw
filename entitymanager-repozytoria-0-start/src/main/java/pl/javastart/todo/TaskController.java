@@ -6,10 +6,11 @@ import java.util.Scanner;
 
 @Controller
 class TaskController {
-    private final TaskRepository taskRepository = new SimpleTaskRepository();
+    private final TaskRepository taskRepository;
     private final Scanner scanner;
 
-    public TaskController(Scanner scanner) {
+    public TaskController(TaskRepository taskRepository, Scanner scanner) {
+        this.taskRepository = taskRepository;
         this.scanner = scanner;
     }
 
