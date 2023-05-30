@@ -10,6 +10,7 @@ import pl.javastart.todo.exception.TaskNotFoundException;
 import pl.javastart.todo.exception.TaskNotStartedException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,9 +21,13 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
+    private static Long nextId = 1L;
+
     @Transactional
     public Long saveTask(NewTaskDto task){
         Task taskToSave = new Task(task.getTitle(), task.getDescription(), task.getPriority());
+        taskToSave.setId(nextId);
+        nextId++;
         Task savedTask = taskRepository.save(taskToSave);
         return savedTask.getId();
     }
@@ -54,5 +59,13 @@ public class TaskService {
         }
         task.setCompletionTime(LocalDateTime.now());
         return new TaskDurationDto(task.getStartTime(), task.getCompletionTime());
+    }
+
+    public List<Task> notStartedTask(){
+        return taskRepository.findAllByStartTimeIsNullOrderByPriorityDesc();
+    }
+
+    public List<Task> finishedTask(){
+        return taskRepository.findAllByCompletionTimeIsNotNullOrderByCompletionTimeDesc();
     }
 }

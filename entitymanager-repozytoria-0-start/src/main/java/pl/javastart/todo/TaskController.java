@@ -47,21 +47,13 @@ class TaskController {
     private void evaluateOption(Option option) {
         try{
             switch (option) {
-                case ADD -> {
-                    addTask();
-                }
-                case PRINT_SINGLE -> {
-                    printTask();
-                }
-                case START_TASK -> {
-                    startTask();
-                }
-                case END_TASK -> {
-                    endTask();
-                }
-                case EXIT -> {
-                    exit();
-                }
+                case ADD -> addTask();
+                case PRINT_SINGLE -> printTask();
+                case PRINT_NOT_STARTED -> printNotStarted();
+                case PRINT_FINISHED -> printFinished();
+                case START_TASK -> startTask();
+                case END_TASK -> endTask();
+                case EXIT -> exit();
             }
         }catch (TaskNotFoundException e){
             System.out.println("Nie znaleziono zadania o podanym id");
@@ -69,9 +61,18 @@ class TaskController {
 
     }
 
+    private void printFinished() {
+        for (Task task : taskService.finishedTask()) {
+            System.out.println(task);
+        }
 
+    }
 
-
+    private void printNotStarted() {
+        for (Task task : taskService.notStartedTask()) {
+            System.out.println(task);
+        }
+    }
 
 
     private void addTask() {
@@ -133,9 +134,11 @@ class TaskController {
     private enum Option {
         ADD(1, "Dodaj nowe zadanie"),
         PRINT_SINGLE(2, "Wyświetl zadanie"),
-        START_TASK(3, "Wystartuj zadanie"),
-        END_TASK(4, "Zakończ zadanie"),
-        EXIT(5, "Koniec programu");
+        PRINT_NOT_STARTED(3, "Wyświetl nierozpoczęte zadania"),
+        PRINT_FINISHED(4, "Wyświetl zakończone zadania"),
+        START_TASK(5, "Wystartuj zadanie"),
+        END_TASK(6, "Zakończ zadanie"),
+        EXIT(7, "Koniec programu");
 
         private final int number;
         private final String name;
